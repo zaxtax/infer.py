@@ -1,0 +1,4 @@
+#!/bin/sh
+
+BASEDIR=$(dirname $0)
+mono --runtime=v4.0.30319 $BASEDIR/python.exe $BASEDIR/ipython.py
