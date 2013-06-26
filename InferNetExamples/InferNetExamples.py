@@ -21,14 +21,14 @@ from BayesPointMachine import *
 
 two_coins()
 
-clinical_trial()
-
 truncated_gaussian()
+
+clinical_trial()
 
 gaussian_ranges()
 
-bayes_point_machine()
-
 gaussian_mixture()
+
+bayes_point_machine()
 
 sys.stdin.readline()

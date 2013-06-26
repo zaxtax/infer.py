@@ -12,7 +12,7 @@ def truncated_gaussian():
     # The model
     threshold = Variable.New[float]().Named("threshold")
     x = Variable.GaussianFromMeanAndVariance(0, 1).Named("x")
-    Variable.ConstrainTrue(x > threshold)
+    Variable.ConstrainTrue(x.op_GreaterThan(x, threshold))
 
     # The inference, looping over different thresholds
     ie = InferenceEngine()

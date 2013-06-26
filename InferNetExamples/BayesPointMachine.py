@@ -17,8 +17,12 @@ def bayes_point_machine():
     w0 = VectorGaussian(Vector.Zero(3), PositiveDefiniteMatrix.Identity(3))
     w = Variable.Random[Vector](w0)
     noise = 0.1
-    y[j] = Variable.GaussianFromMeanAndVariance(
-	    Variable.InnerProduct(w, x[j]).Named("innerProduct"), noise) > 0
+    tmp = Variable.GaussianFromMeanAndVariance(
+        Variable.InnerProduct(w,
+                              x.get_Item(j)).Named("innerProduct"),
+        noise)
+
+    y.set_Item(j, tmp.op_GreaterThan(tmp, 0))
 
     # The data
     incomes = System.Array[float]((63, 16, 28, 55, 22, 20 ))
@@ -45,13 +49,17 @@ def bayes_point_machine():
     testDataLen = incomesTest.Length
     xtestData = System.Array.CreateInstance(Vector, testDataLen)
     for i in range(0, testDataLen):
-        xtestData[i] = Vector.FromArray(System.Array[float]((incomesTest[i], agesTest[i], 1.0)))
+        xtestData[i] = Vector.FromArray(System.Array[float]((incomesTest[i],
+                                                             agesTest[i], 1.0)))
 
     jtest = Range(testDataLen)
-    xtest = Variable.Observed[Vector](xtestData, jtest)
+    xtest = Variable.Array[Vector](jtest)
+    xtest.ObservedValue = xtestData
+
     wtest = Variable.Random[Vector](wPosterior)
     ytest = Variable.Array[bool](jtest)
-    ytest[jtest] = Variable.GaussianFromMeanAndVariance(
-                      Variable.InnerProduct(wtest, xtest[jtest]), noise) > 0
+    tmp2 = Variable.GaussianFromMeanAndVariance(
+        Variable.InnerProduct(wtest, xtest.get_Item(jtest)), noise)
+    ytest.set_Item(jtest, tmp2.op_GreaterThan(tmp2, 0))
     ypred = Distribution.ToArray[System.Array[Bernoulli]](ie.Infer(ytest))
     print "Output = ", ypred[0], ",", ypred[1], ",", ypred[2]

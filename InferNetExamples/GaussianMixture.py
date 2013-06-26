@@ -42,11 +42,11 @@ def gaussian_mixture():
     means = Variable.Array[Vector](k).Named("means")
     mm0 = Vector.FromArray(0.0,0.0)
     mp0 = PositiveDefiniteMatrix.IdentityScaledBy(2,0.01)
-    means[k] = Variable.VectorGaussianFromMeanAndPrecision(mm0, mp0).ForEach(k)
+    means = Variable.VectorGaussianFromMeanAndPrecision(mm0, mp0).ForEach(k)
 
     # Mixture component precisions
     precs = Variable.Array[PositiveDefiniteMatrix](k).Named("precs")
-    precs[k] = Variable.WishartFromShapeAndScale(100.0, PositiveDefiniteMatrix.IdentityScaledBy(2,0.01)).ForEach(k)
+    precs = Variable.WishartFromShapeAndScale(100.0, PositiveDefiniteMatrix.IdentityScaledBy(2,0.01)).ForEach(k)
 
     # Mixture weights 
     weights = Variable.Dirichlet(k, System.Array[float]((1, 1))).Named("weights") 
