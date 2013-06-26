@@ -1,4 +1,0 @@
-iterate locals() and replace each clr method
-with something pythonic
-
-http://www.rafekettler.com/magicmethods.html
